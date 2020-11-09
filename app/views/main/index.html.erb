@@ -1,0 +1,64 @@
+<div id="addtaskflex">
+  <div id="addtask">
+    <h3>НОВАЯ ЗАДАЧА</h3>
+    <hr id="delimeter" noshade>
+    <%= form_tag(main_create_path, method: "post", id: "form") do %>
+      <%= text_field_tag(:text, nil, placeholder: 'Название задачи...', class:'textfield') %>
+      <div id="addproject">
+        <%= text_field_tag(:title, nil, placeholder: 'Название категории...', class:'textfield') %>
+      </div>
+      <div id="select">
+        <select name="project_id" id="project_id" style="width:100%;">
+        <% @projects.each do |project| %>
+          <%= options_for_select([[project["title"], project["id"]]]) %>
+        <% end %>
+        <option value="newctg">Новая категория</option>
+        </select>
+      </div>
+
+      <div id="buttons">
+        <a id="hide" href="#"><div id="cancel">ОТМЕНА</div></a>
+        <%= link_to "#", id: "submit" do %>
+          <div id="ok">ОК</div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div id="headline">
+  <h1>Задачи</h1>
+  <div id="plus">
+      <%= image_tag("addIcon.png", :alt => "Новая задача") %>
+  </div>
+</div>
+
+
+
+<div class="container">
+
+  <div class="row" id="cards">
+    <% @projects.each do |project| %>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div id="todoCard">
+          <h3><%= project["title"] %></h3>
+          <hr id="delimeter" noshade>
+          <ul>
+            <% @todo.each do |task| %>
+            <% if task["project_id"] == project["id"] then %>
+              <%= form_tag(main_update_path, method: "post", id: task.id) do %>
+                <%= hidden_field_tag 'todo_id', task.id %>
+                <% if task.isCompleted == true then %>
+                  <li><input type="checkbox" id="check" value="<%= task.id %>" checked><span id="completed"><%= task.text %></span></li>
+                <% else  %>
+                  <li><input type="checkbox" id="check" value="<%= task.id %>"><span id="uncompleted"><%= task.text %></span></li>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
